@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eomjinyoung.ew.dao.TestWordDao">
+
+  <resultMap type="testWord" id="testWordMap">
+    <id column="wno" property="wordNo"/>
+    <id column="wgno" property="wordGroupNo"/>
+    <association property="word" javaType="word">
+      <id column="w_no" property="no"/>
+      <result column="w_name" property="name"/>
+      <result column="w_meaning" property="meaning"/>
+    </association>
+    <association property="wordGroup" javaType="wordgroup">
+      <id column="wg_no" property="no"/>
+      <result column="wg_title" property="title"/>
+    </association>
+  </resultMap>
+
+  <sql id="selectColumns">
+    tw.wno,
+    tw.wgno,
+    w.no as w_no,
+    w.name as w_name,
+    w.meaning as w_meaning,
+    wg.no as wg_no,
+    wg.title as wg_title
+  </sql>
+ 
+  <select id="findTestWord" resultMap="testWordMap" parameterType="map">
+    select 
+      <include refid="selectColumns"/>
+    from 
+      ew_testword tw
+      join ew_word w on tw.wno = w.no
+      join ew_wordgroup wg on tw.wgno = wg.no
+    <where>
+      <if test="wordGroupNo != null">
+           tw.wgno = #{wordGroupNo}
+      </if>
+      <if test="wordName != null">
+           and w.name = #{wordName}
+      </if>
+    </where>
+  </select>
+  
+  <insert id="insert" parameterType="testWord">
+    insert into ew_testword(wno, wgno)
+    values (#{wordNo},#{wordGroupNo})
+  </insert>
+</mapper>
+
+
+

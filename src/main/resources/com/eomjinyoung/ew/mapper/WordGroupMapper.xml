@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eomjinyoung.ew.dao.WordGroupDao">
+
+  <select id="findAll" resultType="wordGroup">
+    select no, title
+    from ew_wordgroup
+  </select>
+
+  <select id="findByNo" resultType="wordGroup" parameterType="int">
+    select no, title
+    from ew_wordgroup
+    where no=#{value}
+  </select>
+  
+  <insert id="insert" parameterType="wordgroup">
+    insert into ew_wordgroup(title) 
+    VALUES(#{title})
+  </insert>
+  
+  <update id="update" parameterType="wordgroup">
+    update ew_wordgroup set 
+        title=#{title}
+    where no=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from ew_wordgroup 
+    where no=#{value}
+  </delete>
+  
+</mapper>

@@ -1,0 +1,37 @@
+plugins {
+  id 'java'
+  id 'eclipse'
+  id 'application'
+}
+
+repositories {
+  jcenter()
+}
+
+dependencies {
+  // Spring IoC 컨테이너
+  compile group: 'org.springframework', name: 'spring-context', version: '5.1.4.RELEASE'
+
+  // 엑셀(.xlsx) 파일을 다루는 라이브러리
+  compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.0.1'
+  
+  // MySQL JDBC Driver
+  compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.47'
+  
+  // Mybatis 퍼시스턴스 프레임워크
+  compile group: 'org.mybatis', name: 'mybatis', version: '3.5.0'
+  
+  // Mybatis-Spring 연동 라이브러리
+  compile group: 'org.mybatis', name: 'mybatis-spring', version: '2.0.0'
+  
+  // Spring JDBC 관련 라이브러리
+  compile group: 'org.springframework', name: 'spring-jdbc', version: '5.1.4.RELEASE'
+  
+  // Log4j 2 라이브러리 
+  compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+  
+  implementation 'com.google.guava:guava:26.0-jre'
+  testImplementation 'junit:junit:4.12'
+}
+
+mainClassName = 'com.eomjinyoung.ew.App'

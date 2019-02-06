@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eomjinyoung.ew.dao.MemberDao">
+
+  <resultMap type="member" id="memberMap">
+    <id column="no" property="no"/>
+    <result column="username" property="username"/>
+    <result column="email" property="email"/>
+    <result column="pwd" property="password"/>
+    <result column="cdt" property="createdDate"/>
+  </resultMap>
+
+  <sql id="selectColumns">
+    no, username, email, pwd, cdt
+  </sql>
+ 
+  <select id="findAll" resultMap="memberMap">
+    select 
+      <include refid="selectColumns"/>
+    from ew_member
+  </select>
+
+  <select id="findByNo" resultMap="memberMap" parameterType="int">
+    select 
+      <include refid="selectColumns"/>
+    from ew_member
+    where no=#{value}
+  </select>
+  
+  <select id="findByUsernameAndPassword" resultMap="memberMap" parameterType="map">
+    select 
+      <include refid="selectColumns"/>
+    from ew_member
+    where username=#{username} and pwd=sha1(#{password})
+  </select>
+  
+  <insert id="insert" parameterType="member">
+    insert into ew_member(username, email, pwd) 
+    VALUES(#{username},#{email},sha1(#{password}))
+  </insert>
+  
+  <update id="update" parameterType="member">
+    update ew_member set 
+        username=#{username},
+        email=#{email},
+        pwd=sha1(#{password}) 
+    where no=#{no}
+  </update>
+  
+  <delete id="delete" parameterType="int">
+    delete from ew_member 
+    where no=#{value}
+  </delete>
+  
+</mapper>
