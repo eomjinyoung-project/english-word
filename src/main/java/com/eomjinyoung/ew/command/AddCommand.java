@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import com.eomjinyoung.ew.domain.TestWord;
+import com.eomjinyoung.ew.domain.Vocabulary;
 import com.eomjinyoung.ew.domain.Word;
 import com.eomjinyoung.ew.domain.WordGroup;
-import com.eomjinyoung.ew.service.TestWordService;
+import com.eomjinyoung.ew.service.VocabularyService;
 import com.eomjinyoung.ew.service.WordGroupService;
 import com.eomjinyoung.ew.service.WordService;
 
@@ -17,12 +17,12 @@ public class AddCommand implements Command {
   Scanner keyboard;
   WordService wordService;
   WordGroupService wordGroupService;
-  TestWordService testWordService;
+  VocabularyService testWordService;
   
   public AddCommand(
       WordService wordService, 
       WordGroupService wordGroupService,
-      TestWordService testWordService,
+      VocabularyService testWordService,
       @Qualifier("keyboard") Scanner keyboard) {
     this.wordService = wordService;
     this.wordGroupService = wordGroupService;
@@ -42,11 +42,11 @@ public class AddCommand implements Command {
         break;
       }
       
-      List<TestWord> testWords = testWordService.getTestWordsInWordGroup(wordGroup.getNo(), wordName);
+      List<Vocabulary> testWords = testWordService.getVocabularies(wordGroup.getNo(), wordName);
       
       if (testWords.size() > 0) {
         System.out.println("단어집에 이미 등록된 단어가 있습니다.");
-        for (TestWord testWord : testWords) {
+        for (Vocabulary testWord : testWords) {
           System.out.printf("> %s = %s\n", testWord.getWord().getName(), testWord.getWord().getMeaning());
         }
         System.out.print("뜻을 추가하시겠습니까?(y/N)");
@@ -81,7 +81,7 @@ public class AddCommand implements Command {
           }
           
           if (word != null) {
-            testWordService.add(new TestWord(word.getNo(), wordGroup.getNo()));
+            testWordService.add(new Vocabulary(word.getNo(), wordGroup.getNo()));
             continue;
           }
         }
@@ -94,7 +94,7 @@ public class AddCommand implements Command {
       
       Word word = new Word(wordName, wordMeaning);
       wordService.addWord(word);
-      testWordService.add(new TestWord(word.getNo(), wordGroup.getNo()));
+      testWordService.add(new Vocabulary(word.getNo(), wordGroup.getNo()));
     }
     
   }

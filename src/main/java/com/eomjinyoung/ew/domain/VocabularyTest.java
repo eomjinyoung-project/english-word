@@ -2,22 +2,22 @@ package com.eomjinyoung.ew.domain;
 
 import java.sql.Date;
 
-public class MemberTestWord {
+public class VocabularyTest {
   
   protected int no;
   protected Date testingDate;
   protected int step;
   protected Word word;
   protected WordGroup wordGroup;
-  protected Member member;
+  protected User user;
   
-  public MemberTestWord() {
+  public VocabularyTest() {
   }
 
   @Override
   public String toString() {
-    return "MemberTestWord [no=" + no + ", testingDate=" + testingDate + ", step=" + step
-        + ", word=" + word + ", wordGroup=" + wordGroup + ", member=" + member + "]";
+    return "VocabularyTest [no=" + no + ", testingDate=" + testingDate + ", step=" + step
+        + ", word=" + word + ", wordGroup=" + wordGroup + ", user=" + user + "]";
   }
 
   public int getNo() {
@@ -44,12 +44,12 @@ public class MemberTestWord {
     this.wordGroup = wordGroup;
   }
 
-  public Member getMember() {
-    return member;
+  public User getUser() {
+    return user;
   }
 
-  public void setMember(Member member) {
-    this.member = member;
+  public void setUser(User user) {
+    this.user = user;
   }
 
   public Date getTestingDate() {

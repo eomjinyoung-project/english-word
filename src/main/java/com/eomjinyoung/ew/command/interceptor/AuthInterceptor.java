@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import com.eomjinyoung.ew.AppSession;
 import com.eomjinyoung.ew.command.Command;
 import com.eomjinyoung.ew.command.CommandInterceptor;
-import com.eomjinyoung.ew.domain.Member;
+import com.eomjinyoung.ew.domain.User;
 
 @Component
 public class AuthInterceptor implements CommandInterceptor {
@@ -33,7 +33,7 @@ public class AuthInterceptor implements CommandInterceptor {
   }
   
   private boolean isLoggedIn() {
-    Member member = (Member) appSession.getAttribute("user");
+    User member = (User) appSession.getAttribute("user");
     
     if (member == null)
       return false;

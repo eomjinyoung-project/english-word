@@ -1,23 +1,26 @@
 package com.eomjinyoung.ew.service;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Service;
+import com.eomjinyoung.ew.dao.VocabularyDao;
 import com.eomjinyoung.ew.dao.WordDao;
+import com.eomjinyoung.ew.domain.Vocabulary;
 import com.eomjinyoung.ew.domain.Word;
 
 @Service
 public class WordService {
   
   WordDao wordDao;
+  VocabularyDao vocabularyDao;
   
-  public WordService(WordDao wordDao) {
+  public WordService(WordDao wordDao, VocabularyDao vocabularyDao) {
     this.wordDao = wordDao;
+    this.vocabularyDao = vocabularyDao;
   }
   
   public void uploadFromExcelToDatabase(File file) throws Exception {
@@ -33,12 +36,7 @@ public class WordService {
       
       try {
         wordDao.insert(word);
-        
-        HashMap<String,Object> paramMap = new HashMap<>();
-        paramMap.put("wordNo", word.getNo());
-        paramMap.put("wordGroupNo", row.getCell(2).getNumericCellValue());
-        
-        wordDao.insertInGroupByWordNo(paramMap);
+        vocabularyDao.insert(new Vocabulary(word.getNo(), (int)row.getCell(2).getNumericCellValue()));
         
         System.out.println(++count);
         
@@ -46,11 +44,13 @@ public class WordService {
         System.out.printf("%s=%s\n", row.getCell(0).getStringCellValue(), row.getCell(1).getStringCellValue());
         System.out.println(e.toString() + ":" + e.getMessage());
         
+        /*
         HashMap<String,Object> paramMap = new HashMap<>();
         paramMap.put("wordName", word.getName());
         paramMap.put("wordGroupNo", row.getCell(2).getNumericCellValue());
         
-        wordDao.insertInGroupByWordName(paramMap);
+        vocabularyDao.insertByWordName(paramMap);
+        */
       }
       /*
         for (Cell cell : row) {

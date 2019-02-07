@@ -5,9 +5,9 @@ import com.eomjinyoung.ew.domain.Word;
 import com.eomjinyoung.ew.domain.WordGroup;
 
 public interface WordGroupDao {
-  int insert(WordGroup wordGroup);
-  Word findByNo(int no);
   List<WordGroup> findAll();
+  Word findById(int id);
+  int insert(WordGroup wordGroup);
   int update(WordGroup wordGroup); 
-  int delete(int no);
+  int delete(int id);
 }

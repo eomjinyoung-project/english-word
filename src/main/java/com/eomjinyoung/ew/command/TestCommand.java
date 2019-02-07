@@ -6,11 +6,11 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import com.eomjinyoung.ew.AppSession;
-import com.eomjinyoung.ew.domain.Member;
+import com.eomjinyoung.ew.domain.User;
 import com.eomjinyoung.ew.domain.StudyStep;
-import com.eomjinyoung.ew.domain.MemberTestWord;
+import com.eomjinyoung.ew.domain.VocabularyTest;
 import com.eomjinyoung.ew.domain.WordGroup;
-import com.eomjinyoung.ew.service.MemberTestWordService;
+import com.eomjinyoung.ew.service.VocabularyTestService;
 import com.eomjinyoung.ew.service.WordGroupService;
 
 @Component("test")
@@ -29,12 +29,12 @@ public class TestCommand implements Command {
   
   Scanner keyboard;
   AppSession appSession;
-  MemberTestWordService memberTestWordService;
+  VocabularyTestService memberTestWordService;
   WordGroupService wordGroupService;
   
   public TestCommand(
       AppSession appSession, 
-      MemberTestWordService testWordService, 
+      VocabularyTestService testWordService, 
       WordGroupService wordGroupService,
       @Qualifier("keyboard") Scanner keyboard) {
     this.appSession = appSession;
@@ -45,11 +45,11 @@ public class TestCommand implements Command {
   
   @Override
   public void execute() {
-    Member member = (Member) appSession.getAttribute("user");
+    User member = (User) appSession.getAttribute("user");
     
     int wordGroupNo = selectWordGroup();
     
-    memberTestWordService.prepareTestWords(member.getNo(), wordGroupNo);
+    memberTestWordService.prepareVocabularyTest(member.getNo(), wordGroupNo);
     
     for (int step = 7; step > 0; step--) {
       testStepWords(member.getNo(), wordGroupNo, step);
@@ -95,7 +95,7 @@ public class TestCommand implements Command {
   
   private void testStepWords(int memberNo, int wordGroupNo, int step) {
     StudyStep studyStep = studySteps[step];
-    List<MemberTestWord> testWords = memberTestWordService.getTodayTestWords(memberNo, wordGroupNo, step);
+    List<VocabularyTest> testWords = memberTestWordService.getTodayVocabularyTest(memberNo, wordGroupNo, step);
     
     if (testWords.size() == 0)
       return;
@@ -103,11 +103,11 @@ public class TestCommand implements Command {
     System.out.printf("[%d 단계 - %s (%d 개 단어)]\n", 
         studyStep.getNo(), studyStep.getTitle(), testWords.size());
     
-    List<MemberTestWord> passWords = new ArrayList<>();
-    List<MemberTestWord> failWords = new ArrayList<>();
+    List<VocabularyTest> passWords = new ArrayList<>();
+    List<VocabularyTest> failWords = new ArrayList<>();
     
     boolean isPutOff = false;
-    for (MemberTestWord testWord : testWords) {
+    for (VocabularyTest testWord : testWords) {
       if (isPutOff) {
         failWords.add(testWord);
         continue;
@@ -130,21 +130,21 @@ public class TestCommand implements Command {
     }
     System.out.println();
     
-    memberTestWordService.increaseUserTestWordStep(passWords, studyStep);
-    memberTestWordService.retestUserTestWordStep(failWords, studyStep);
+    memberTestWordService.increaseVocabularyTestStep(passWords, studyStep);
+    memberTestWordService.retestVocabularyTestStep(failWords, studyStep);
   }
   
   private void testNewWords(int memberNo, int wordGroupNo) {
-    List<MemberTestWord> testWords = memberTestWordService.getNewTestWords(memberNo, wordGroupNo);
+    List<VocabularyTest> testWords = memberTestWordService.getNewVocabularyTest(memberNo, wordGroupNo);
     
     if (testWords.size() == 0)
       return;
     
     System.out.printf("[새로 암기할 단어 %d 개]\n", testWords.size());
     
-    List<MemberTestWord> passWords = new ArrayList<>();
+    List<VocabularyTest> passWords = new ArrayList<>();
     
-    for (MemberTestWord testWord : testWords) {
+    for (VocabularyTest testWord : testWords) {
         
       System.out.print(testWord.getWord().getName());
       
@@ -161,7 +161,7 @@ public class TestCommand implements Command {
     }
     System.out.println();
     
-    memberTestWordService.increaseUserTestWordStep(passWords, studySteps[0]);
+    memberTestWordService.increaseVocabularyTestStep(passWords, studySteps[0]);
   }  
   
 }

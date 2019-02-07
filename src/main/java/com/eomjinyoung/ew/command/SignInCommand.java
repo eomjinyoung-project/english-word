@@ -5,18 +5,18 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import com.eomjinyoung.ew.AppSession;
-import com.eomjinyoung.ew.domain.Member;
-import com.eomjinyoung.ew.service.MemberService;
+import com.eomjinyoung.ew.domain.User;
+import com.eomjinyoung.ew.service.UserService;
 
 @Component("signin")
 public class SignInCommand implements Command {
 
   Scanner keyboard;
-  MemberService memberService;
+  UserService memberService;
   AppSession appSession;
   
   public SignInCommand(
-      MemberService memberService, 
+      UserService memberService, 
       @Qualifier("keyboard") Scanner keyboard,
       AppSession appSession) {
     this.memberService = memberService;
@@ -35,7 +35,7 @@ public class SignInCommand implements Command {
     params.put("password", keyboard.nextLine());
     
     try {
-      Member member = memberService.signIn(params);
+      User member = memberService.signIn(params);
       if (member == null) {
         System.out.println("사용자 이름 또는 암호가 맞지 않습니다.");
         return;

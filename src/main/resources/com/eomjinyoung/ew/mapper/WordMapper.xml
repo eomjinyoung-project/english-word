@@ -5,14 +5,14 @@
 <mapper namespace="com.eomjinyoung.ew.dao.WordDao">
 
   <resultMap type="word" id="wordMap">
-    <id column="no" property="no"/>
+    <id column="word_id" property="no"/>
     <result column="name" property="name"/>
     <result column="meaning" property="meaning"/>
-    <result column="cdt" property="createdDate"/>
+    <result column="create_date" property="createdDate"/>
   </resultMap>
 
   <sql id="selectColumns">
-    no, name, meaning, cdt
+    word_id, name, meaning, create_date
   </sql>
  
   <select id="findAll" resultMap="wordMap">
@@ -21,11 +21,11 @@
     from ew_word
   </select>
 
-  <select id="findByNo" resultMap="wordMap" parameterType="int">
+  <select id="findById" resultMap="wordMap" parameterType="int">
     select 
       <include refid="selectColumns"/>
     from ew_word
-    where no=#{value}
+    where word_id=#{value}
   </select>
   
   <select id="findByName" resultMap="wordMap" parameterType="string">
@@ -35,7 +35,7 @@
     where name=#{value}
   </select>
   
-  <insert id="insert" parameterType="word" useGeneratedKeys="true" keyColumn="no" keyProperty="no">
+  <insert id="insert" parameterType="word" useGeneratedKeys="true" keyColumn="word_id" keyProperty="no">
     insert into ew_word(name, meaning) 
     VALUES(#{name},#{meaning})
   </insert>
@@ -44,21 +44,12 @@
     update ew_word set 
         name=#{name},
         meaning=#{meaning} 
-    where no=#{no}
+    where word_id=#{no}
   </update>
   
   <delete id="delete" parameterType="int">
     delete from ew_word 
-    where no=#{value}
+    where word_id=#{value}
   </delete>
   
-  <insert id="insertInGroupByWordNo" parameterType="map">
-    insert into ew_testword(wno, wgno) 
-    VALUES(#{wordNo},#{wordGroupNo})
-  </insert>
-  
-  <insert id="insertInGroupByWordName" parameterType="map">
-    insert into ew_testword(wno, wgno) 
-    VALUES((select no from ew_word where name=#{wordName}),#{wordGroupNo})
-  </insert>
 </mapper>

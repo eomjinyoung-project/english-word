@@ -4,31 +4,42 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.eomjinyoung.ew.dao.WordGroupDao">
 
-  <select id="findAll" resultType="wordGroup">
-    select no, title
-    from ew_wordgroup
+  <resultMap type="wordGroup" id="wordGroupMap">
+    <id column="word_group_id" property="no"/>
+    <result column="title" property="title"/>
+  </resultMap>
+  
+  <sql id="selectColumns">
+    word_group_id, title
+  </sql>
+  
+  <select id="findAll" resultMap="wordGroupMap">
+    select 
+      <include refid="selectColumns"/>
+    from ew_word_group
   </select>
 
-  <select id="findByNo" resultType="wordGroup" parameterType="int">
-    select no, title
-    from ew_wordgroup
-    where no=#{value}
+  <select id="findById" resultMap="wordGroupMap" parameterType="int">
+    select 
+      <include refid="selectColumns"/>
+    from ew_word_group
+    where word_group_id=#{value}
   </select>
   
-  <insert id="insert" parameterType="wordgroup">
-    insert into ew_wordgroup(title) 
-    VALUES(#{title})
+  <insert id="insert" parameterType="wordGroup">
+    insert into ew_word_group(title) 
+    values(#{title})
   </insert>
   
-  <update id="update" parameterType="wordgroup">
-    update ew_wordgroup set 
+  <update id="update" parameterType="wordGroup">
+    update ew_word_group set 
         title=#{title}
-    where no=#{no}
+    where word_group_id=#{no}
   </update>
   
   <delete id="delete" parameterType="int">
-    delete from ew_wordgroup 
-    where no=#{value}
+    delete from ew_word_group 
+    where word_group_id=#{value}
   </delete>
   
 </mapper>

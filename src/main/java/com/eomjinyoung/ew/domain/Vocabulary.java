@@ -1,22 +1,22 @@
 package com.eomjinyoung.ew.domain;
 
-public class TestWord {
+public class Vocabulary {
   protected int wordNo;
   protected int wordGroupNo;
   protected Word word;
   protected WordGroup wordGroup;
   
-  public TestWord() {
+  public Vocabulary() {
   }
 
-  public TestWord(int wordNo, int wordGroupNo) {
+  public Vocabulary(int wordNo, int wordGroupNo) {
     this.wordNo = wordNo;
     this.wordGroupNo = wordGroupNo;
   }
   
   @Override
   public String toString() {
-    return "TestWord [wordNo=" + wordNo + ", wordGroupNo=" + wordGroupNo + ", word=" + word
+    return "Vocabulary [wordNo=" + wordNo + ", wordGroupNo=" + wordGroupNo + ", word=" + word
         + ", wordGroup=" + wordGroup + "]";
   }
 

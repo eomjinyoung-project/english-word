@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eomjinyoung.ew.dao.VocabularyTestDao">
+
+  <resultMap type="vocabularyTest" id="vocabularyTestMap">
+    <id column="vocabulary_test_id" property="no"/>
+    <result column="test_date" property="testingDate"/>
+    <result column="step" property="step"/>
+    <association property="word" javaType="word">
+      <id column="w_no" property="no"/>
+      <result column="w_name" property="name"/>
+      <result column="w_meaning" property="meaning"/>
+    </association>
+    <association property="wordGroup" javaType="wordgroup">
+      <id column="wg_no" property="no"/>
+      <result column="wg_title" property="title"/>
+    </association>
+    <association property="user" javaType="user">
+      <id column="u_no" property="no"/>
+      <result column="u_username" property="username"/>
+    </association>
+  </resultMap>
+
+  <sql id="selectColumns">
+    vt.vocabulary_test_id,
+    vt.test_date,
+    vt.step,
+    u.user_id as u_no,
+    u.username as u_username,
+    wg.word_group_id as wg_no,
+    wg.title as wg_title,
+    w.word_id as w_no,
+    w.name as w_name,
+    w.meaning as w_meaning
+  </sql>
+ 
+  <select id="findVocabularyTest" resultMap="vocabularyTestMap" parameterType="map">
+    select 
+      <include refid="selectColumns"/>
+    from ew_vocabulary_test vt
+      left outer join ew_user u on u.user_id=vt.user_id
+      left outer join ew_word_group wg on wg.word_group_id=vt.word_group_id
+      left outer join ew_word w on w.word_id=vt.word_id
+    <where>
+      <if test="userNo != null">
+           vt.user_id = #{userNo}
+      </if>
+      <if test="wordGroupNo != null">
+           and vt.word_group_id = #{wordGroupNo}
+      </if>
+      <if test="step != null">
+           and vt.step = #{step}
+      </if>
+      <if test="testingDate != null">
+           and vt.test_date = #{testingDate}
+      </if>
+    </where>
+  </select>
+
+  <update id="update" parameterType="map">
+    update ew_vocabulary_test set
+      test_date=date_add(test_date, interval #{addingDays} day),
+      step=#{step}
+    where 
+      vocabulary_test_id=#{no}
+  </update>
+  
+  <select id="countNewVocabularyTest" resultType="int" parameterType="map">
+    select 
+      (
+        select count(*) 
+        from 
+          ew_vocabulary 
+        where 
+          word_group_id=#{wordGroupNo}
+      ) 
+      - 
+      (
+        select count(*) 
+        from 
+          ew_vocabulary_test 
+        where 
+          word_group_id=#{wordGroupNo} 
+          and user_id=#{userNo}
+      )
+  </select>
+  
+  <insert id="insertAllOfNewVocabularyTest" parameterType="map">
+    insert into ew_vocabulary(test_date,step,user_id,word_group_id,word_id)
+    select 
+      curdate() as test_date,
+      0 as step,
+      #{userNo} as user_id,
+      v.word_group_id,
+      v.word_id
+    from 
+      (
+        select * 
+        from 
+          ew_vocabulary 
+        where 
+          word_group_id = #{wordGroupNo}
+      ) v
+      left outer join 
+      (
+        select * 
+        from 
+          ew_vocabulary_test 
+        where 
+          user_id=#{userNo}
+      ) vt 
+      on v.word_group_id=vt.word_group_id and v.word_id=vt.word_id
+    where 
+      vt.user_id is null
+  </insert>
+</mapper>
+
+
+

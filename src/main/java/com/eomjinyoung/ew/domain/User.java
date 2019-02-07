@@ -2,7 +2,7 @@ package com.eomjinyoung.ew.domain;
 
 import java.sql.Date;
 
-public class Member {
+public class User {
   protected int no;
   protected String username;
   protected String email;
@@ -11,7 +11,7 @@ public class Member {
   
   @Override
   public String toString() {
-    return "Member [no=" + no + ", username=" + username + ", email=" + email + ", password="
+    return "User [no=" + no + ", username=" + username + ", email=" + email + ", password="
         + password + ", createdDate=" + createdDate + "]";
   }
 

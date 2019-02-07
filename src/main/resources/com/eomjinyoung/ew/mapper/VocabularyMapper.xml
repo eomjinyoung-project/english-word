@@ -2,11 +2,12 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.eomjinyoung.ew.dao.TestWordDao">
+<mapper namespace="com.eomjinyoung.ew.dao.VocabularyDao">
 
-  <resultMap type="testWord" id="testWordMap">
-    <id column="wno" property="wordNo"/>
-    <id column="wgno" property="wordGroupNo"/>
+  <resultMap type="vocabulary" id="vocabularyMap">
+  
+    <id column="word_group_id" property="wordGroupNo"/>
+    <id column="word_id" property="wordNo"/>
     <association property="word" javaType="word">
       <id column="w_no" property="no"/>
       <result column="w_name" property="name"/>
@@ -16,28 +17,29 @@
       <id column="wg_no" property="no"/>
       <result column="wg_title" property="title"/>
     </association>
+    
   </resultMap>
 
   <sql id="selectColumns">
-    tw.wno,
-    tw.wgno,
-    w.no as w_no,
+    v.word_group_id,
+    v.word_id,
+    w.word_id as w_no,
     w.name as w_name,
     w.meaning as w_meaning,
-    wg.no as wg_no,
+    wg.word_group_id as wg_no,
     wg.title as wg_title
   </sql>
  
-  <select id="findTestWord" resultMap="testWordMap" parameterType="map">
+  <select id="findByWordGroupNoAndWordName" resultMap="vocabularyMap" parameterType="map">
     select 
       <include refid="selectColumns"/>
     from 
-      ew_testword tw
-      join ew_word w on tw.wno = w.no
-      join ew_wordgroup wg on tw.wgno = wg.no
+      ew_vocabulary v
+      join ew_word w on v.word_id = w.word_id
+      join ew_word_group wg on v.word_group_id = wg.word_group_id
     <where>
       <if test="wordGroupNo != null">
-           tw.wgno = #{wordGroupNo}
+           v.word_group_id = #{wordGroupNo}
       </if>
       <if test="wordName != null">
            and w.name = #{wordName}
@@ -45,9 +47,14 @@
     </where>
   </select>
   
-  <insert id="insert" parameterType="testWord">
-    insert into ew_testword(wno, wgno)
-    values (#{wordNo},#{wordGroupNo})
+  <insert id="insert" parameterType="vocabulary">
+    insert into ew_vocabulary(word_group_id, word_id)
+    values(#{wordGroupNo},#{wordNo})
+  </insert>
+  
+  <insert id="insertByWordName" parameterType="map">
+    insert into ew_vocabulary(word_group_id, word_id)
+    values(#{wordGroupNo}, (select no from ew_word where name=#{wordName}))
   </insert>
 </mapper>
 

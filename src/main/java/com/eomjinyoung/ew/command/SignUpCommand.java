@@ -3,23 +3,23 @@ package com.eomjinyoung.ew.command;
 import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import com.eomjinyoung.ew.domain.Member;
-import com.eomjinyoung.ew.service.MemberService;
+import com.eomjinyoung.ew.domain.User;
+import com.eomjinyoung.ew.service.UserService;
 
 @Component("signup")
 public class SignUpCommand implements Command {
 
   Scanner keyboard;
-  MemberService memberService;
+  UserService memberService;
   
-  public SignUpCommand(MemberService memberService, @Qualifier("keyboard") Scanner keyboard) {
+  public SignUpCommand(UserService memberService, @Qualifier("keyboard") Scanner keyboard) {
     this.memberService = memberService;
     this.keyboard = keyboard;
   }
   
   @Override
   public void execute() {
-    Member member = new Member();
+    User member = new User();
     
     System.out.print("아이디: ");
     member.setUsername(keyboard.nextLine());

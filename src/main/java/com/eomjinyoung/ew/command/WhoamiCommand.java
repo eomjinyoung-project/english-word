@@ -2,7 +2,7 @@ package com.eomjinyoung.ew.command;
 
 import org.springframework.stereotype.Component;
 import com.eomjinyoung.ew.AppSession;
-import com.eomjinyoung.ew.domain.Member;
+import com.eomjinyoung.ew.domain.User;
 
 @Component("whoami")
 public class WhoamiCommand implements Command {
@@ -15,7 +15,7 @@ public class WhoamiCommand implements Command {
   
   @Override
   public void execute() {
-    Member member = (Member) appSession.getAttribute("user");
+    User member = (User) appSession.getAttribute("user");
     
     if (member != null) {
       System.out.printf("%s(%s)\n", member.getUsername(), member.getEmail());
