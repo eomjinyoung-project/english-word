@@ -135,23 +135,23 @@ public class TestCommand implements Command {
   }
   
   private void testNewWords(int memberNo, int wordGroupNo) {
-    List<VocabularyTest> testWords = memberTestWordService.getNewVocabularyTest(memberNo, wordGroupNo);
+    List<VocabularyTest> vocabularyTests = memberTestWordService.getNewVocabularyTest(memberNo, wordGroupNo);
     
-    if (testWords.size() == 0)
+    if (vocabularyTests.size() == 0)
       return;
     
-    System.out.printf("[새로 암기할 단어 %d 개]\n", testWords.size());
+    System.out.printf("[새로 암기할 단어 %d 개]\n", vocabularyTests.size());
     
     List<VocabularyTest> passWords = new ArrayList<>();
     
-    for (VocabularyTest testWord : testWords) {
+    for (VocabularyTest vocabularyTest : vocabularyTests) {
         
-      System.out.print(testWord.getWord().getName());
+      System.out.print(vocabularyTest.getWord().getName());
       
       String input = keyboard.nextLine();
-      System.out.printf("  %s : ", testWord.getWord().getMeaning());
+      System.out.printf("  %s : ", vocabularyTest.getWord().getMeaning());
       
-      passWords.add(testWord);
+      passWords.add(vocabularyTest);
       
       input = keyboard.nextLine();
       

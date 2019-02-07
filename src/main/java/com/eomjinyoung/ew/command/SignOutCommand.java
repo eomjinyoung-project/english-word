@@ -15,5 +15,6 @@ public class SignOutCommand implements Command {
   @Override
   public void execute() {
     appSession.invalidate();
+    System.out.println("로그아웃 했습니다!");
   }
 }

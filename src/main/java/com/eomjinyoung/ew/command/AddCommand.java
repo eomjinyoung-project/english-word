@@ -55,35 +55,34 @@ public class AddCommand implements Command {
         if (input.length() == 0 || !input.equalsIgnoreCase("y")) {
           continue;
         }
+      }
+      
+      List<Word> words = wordService.getWords(wordName);
+      
+      if (words.size() > 0) {
+        System.out.println("전체 사전에 이미 등록된 단어가 있습니다.");
+        for (Word word : words) {
+          System.out.printf("> %d. %s = %s\n", word.getNo(), word.getName(), word.getMeaning());
+        }
         
-      } else {
-        List<Word> words = wordService.getWords(wordName);
-        
-        if (words.size() > 0) {
-          System.out.println("전체 사전에 이미 등록된 단어가 있습니다.");
-          for (Word word : words) {
-            System.out.printf("> %d. %s = %s\n", word.getNo(), word.getName(), word.getMeaning());
-          }
+        Word word = null;
+        while (true) {
+          System.out.print("단어집에 추가할 단어의 번호는?(없으면 그냥 엔터) ");
+          String input = keyboard.nextLine();
+          if (input.length() == 0)
+            break;
           
-          Word word = null;
-          while (true) {
-            System.out.print("단어집에 추가할 단어의 번호는?(없으면 그냥 엔터) ");
-            String input = keyboard.nextLine();
-            if (input.length() == 0)
-              break;
-            
-            word = findWord(words, Integer.parseInt(input));
-            if (word != null) {
-              break;
-            }
-            
-            System.out.println("단어의 번호가 맞지 않습니다.");
-          }
-          
+          word = findWord(words, Integer.parseInt(input));
           if (word != null) {
-            testWordService.add(new Vocabulary(word.getNo(), wordGroup.getNo()));
-            continue;
+            break;
           }
+          
+          System.out.println("단어의 번호가 맞지 않습니다.");
+        }
+        
+        if (word != null) {
+          testWordService.add(new Vocabulary(word.getNo(), wordGroup.getNo()));
+          continue;
         }
       }
       

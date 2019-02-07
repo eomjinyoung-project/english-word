@@ -88,7 +88,7 @@
   </select>
   
   <insert id="insertAllOfNewVocabularyTest" parameterType="map">
-    insert into ew_vocabulary(test_date,step,user_id,word_group_id,word_id)
+    insert into ew_vocabulary_test(test_date,step,user_id,word_group_id,word_id)
     select 
       curdate() as test_date,
       0 as step,
