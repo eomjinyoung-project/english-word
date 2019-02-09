@@ -53,15 +53,15 @@
       <if test="step != null">
            and vt.step = #{step}
       </if>
-      <if test="testingDate != null">
-           and vt.test_date = #{testingDate}
-      </if>
+      <if test="testingDate != null"><![CDATA[
+           and vt.test_date <= #{testingDate}
+      ]]></if>
     </where>
   </select>
 
   <update id="update" parameterType="map">
     update ew_vocabulary_test set
-      test_date=date_add(test_date, interval #{addingDays} day),
+      test_date=date_add(curdate(), interval #{addingDays} day),
       step=#{step}
     where 
       vocabulary_test_id=#{no}

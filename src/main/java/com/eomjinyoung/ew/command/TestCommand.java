@@ -29,7 +29,7 @@ public class TestCommand implements Command {
   
   Scanner keyboard;
   AppSession appSession;
-  VocabularyTestService memberTestWordService;
+  VocabularyTestService vocabularyTestService;
   WordGroupService wordGroupService;
   
   public TestCommand(
@@ -38,7 +38,7 @@ public class TestCommand implements Command {
       WordGroupService wordGroupService,
       @Qualifier("keyboard") Scanner keyboard) {
     this.appSession = appSession;
-    this.memberTestWordService = testWordService;
+    this.vocabularyTestService = testWordService;
     this.wordGroupService = wordGroupService;
     this.keyboard = keyboard;
   }
@@ -49,7 +49,7 @@ public class TestCommand implements Command {
     
     int wordGroupNo = selectWordGroup();
     
-    memberTestWordService.prepareVocabularyTest(member.getNo(), wordGroupNo);
+    vocabularyTestService.prepareVocabularyTest(member.getNo(), wordGroupNo);
     
     for (int step = 7; step > 0; step--) {
       testStepWords(member.getNo(), wordGroupNo, step);
@@ -95,7 +95,7 @@ public class TestCommand implements Command {
   
   private void testStepWords(int memberNo, int wordGroupNo, int step) {
     StudyStep studyStep = studySteps[step];
-    List<VocabularyTest> testWords = memberTestWordService.getTodayVocabularyTest(memberNo, wordGroupNo, step);
+    List<VocabularyTest> testWords = vocabularyTestService.getTodayVocabularyTest(memberNo, wordGroupNo, step);
     
     if (testWords.size() == 0)
       return;
@@ -107,35 +107,36 @@ public class TestCommand implements Command {
     List<VocabularyTest> failWords = new ArrayList<>();
     
     boolean isPutOff = false;
-    for (VocabularyTest testWord : testWords) {
+    int count = 0;
+    for (VocabularyTest vocabularyTest : testWords) {
       if (isPutOff) {
-        failWords.add(testWord);
+        failWords.add(vocabularyTest);
         continue;
       }
         
-      System.out.print(testWord.getWord().getName());
+      System.out.printf("%s (%d)", vocabularyTest.getWord().getName(), ++count);
       
       String input = keyboard.nextLine();
-      System.out.printf("  %s : ", testWord.getWord().getMeaning());
+      System.out.printf("  %s : ", vocabularyTest.getWord().getMeaning());
       
       input = keyboard.nextLine();
       
       if ("q".equals(input)) {
         isPutOff = true;
       } else if ("x".equalsIgnoreCase(input)) {
-        failWords.add(testWord);
+        failWords.add(vocabularyTest);
       } else {
-        passWords.add(testWord);
+        passWords.add(vocabularyTest);
       }
     }
     System.out.println();
     
-    memberTestWordService.increaseVocabularyTestStep(passWords, studyStep);
-    memberTestWordService.retestVocabularyTestStep(failWords, studyStep);
+    vocabularyTestService.increaseVocabularyTestStep(passWords, studyStep);
+    vocabularyTestService.retestVocabularyTestStep(failWords, studyStep);
   }
   
   private void testNewWords(int memberNo, int wordGroupNo) {
-    List<VocabularyTest> vocabularyTests = memberTestWordService.getNewVocabularyTest(memberNo, wordGroupNo);
+    List<VocabularyTest> vocabularyTests = vocabularyTestService.getNewVocabularyTest(memberNo, wordGroupNo);
     
     if (vocabularyTests.size() == 0)
       return;
@@ -144,9 +145,10 @@ public class TestCommand implements Command {
     
     List<VocabularyTest> passWords = new ArrayList<>();
     
+    int count = 0;
     for (VocabularyTest vocabularyTest : vocabularyTests) {
         
-      System.out.print(vocabularyTest.getWord().getName());
+      System.out.printf("%s (%d)", vocabularyTest.getWord().getName(), ++count);
       
       String input = keyboard.nextLine();
       System.out.printf("  %s : ", vocabularyTest.getWord().getMeaning());
@@ -161,7 +163,7 @@ public class TestCommand implements Command {
     }
     System.out.println();
     
-    memberTestWordService.increaseVocabularyTestStep(passWords, studySteps[0]);
+    vocabularyTestService.increaseVocabularyTestStep(passWords, studySteps[0]);
   }  
   
 }

@@ -10,10 +10,10 @@ import com.eomjinyoung.ew.service.UserService;
 public class SignUpCommand implements Command {
 
   Scanner keyboard;
-  UserService memberService;
+  UserService userService;
   
   public SignUpCommand(UserService memberService, @Qualifier("keyboard") Scanner keyboard) {
-    this.memberService = memberService;
+    this.userService = memberService;
     this.keyboard = keyboard;
   }
   
@@ -31,10 +31,11 @@ public class SignUpCommand implements Command {
     member.setPassword(keyboard.nextLine());
     
     try {
-      memberService.signUp(member);
+      userService.signUp(member);
     } catch (Exception e) {
       System.out.println("회원 가입 중에 오류 발생.");
       e.printStackTrace();
+      System.out.println();
     }
     
   }
