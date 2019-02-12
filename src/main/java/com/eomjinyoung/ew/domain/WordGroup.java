@@ -3,6 +3,7 @@ package com.eomjinyoung.ew.domain;
 public class WordGroup {
   protected int no;
   protected String title;
+  protected int size;
   
   public WordGroup() {
   }
@@ -14,7 +15,7 @@ public class WordGroup {
 
   @Override
   public String toString() {
-    return "WordGroup [no=" + no + ", title=" + title + "]";
+    return "WordGroup [no=" + no + ", title=" + title + ", size=" + size + "]";
   }
 
   public int getNo() {
@@ -31,6 +32,14 @@ public class WordGroup {
 
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  public int getSize() {
+    return size;
+  }
+
+  public void setSize(int size) {
+    this.size = size;
   }
 
   

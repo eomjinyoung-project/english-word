@@ -7,23 +7,33 @@
   <resultMap type="wordGroup" id="wordGroupMap">
     <id column="word_group_id" property="no"/>
     <result column="title" property="title"/>
+    <result column="size" property="size"/>
   </resultMap>
   
   <sql id="selectColumns">
-    word_group_id, title
+    wg.word_group_id,
+    wg.title,
+    count(wg.word_group_id) size
   </sql>
   
   <select id="findAll" resultMap="wordGroupMap">
     select 
       <include refid="selectColumns"/>
-    from ew_word_group
+    from ew_word_group wg
+      join ew_vocabulary v on v.word_group_id = wg.word_group_id
+    group by 
+      wg.word_group_id
   </select>
 
   <select id="findById" resultMap="wordGroupMap" parameterType="int">
     select 
       <include refid="selectColumns"/>
-    from ew_word_group
-    where word_group_id=#{value}
+    from ew_word_group wg
+      join ew_vocabulary v on v.word_group_id = wg.word_group_id
+    where 
+      wg.word_group_id = #{value}
+    group by 
+      wg.word_group_id
   </select>
   
   <insert id="insert" parameterType="wordGroup">

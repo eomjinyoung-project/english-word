@@ -127,7 +127,7 @@ public class AddCommand implements Command {
   
   private void printWordGroup(List<WordGroup> wordGroups) {
     for (WordGroup wg : wordGroups) {
-      System.out.printf("%d. %s\n", wg.getNo(), wg.getTitle());
+      System.out.printf("%d. %s(%d)\n", wg.getNo(), wg.getTitle(), wg.getSize());
     }
     System.out.println();
   }
