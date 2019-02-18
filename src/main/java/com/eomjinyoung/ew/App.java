@@ -1,7 +1,6 @@
 package com.eomjinyoung.ew;
 
 import java.util.Scanner;
-import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import com.eomjinyoung.ew.command.Command;
 import com.eomjinyoung.ew.command.CommandInterceptor;
