@@ -35,11 +35,9 @@ public class App {
         
         command.execute();
         
-      } catch (BeansException e) {
-        System.out.println("명령어가 올바르지 않습니다.");
       } catch (Exception e) {
-        System.out.println("명령어를 처리하는 중에 문제가 발생했습니다. 아빠에게 문의하세요!");
-        e.printStackTrace();
+        System.out.println("입력한 값 또는 명령어가 올바르지 않습니다.");
+        //e.printStackTrace();
       }
     }
     
